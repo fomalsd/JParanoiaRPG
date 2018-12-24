@@ -118,8 +118,14 @@ public abstract class JParanoia {
 
     public static void displayImage( String descriptionPlusUrl ) {
         try {
-            String description = descriptionPlusUrl.substring( 0, descriptionPlusUrl.indexOf( IMG_DELIMITER ) );
-            String urlSubstring = descriptionPlusUrl.substring( descriptionPlusUrl.indexOf( IMG_DELIMITER ) + IMG_DELIMITER.length() );
+            int delimiter = descriptionPlusUrl.indexOf( IMG_DELIMITER );
+            if ( delimiter == -1 ){
+                errorMessage( "Image URL parsing error",
+                        "Could not parse image string (delimiter not found): " + descriptionPlusUrl );
+                return;
+            }
+            String description = descriptionPlusUrl.substring( 0, delimiter );
+            String urlSubstring = descriptionPlusUrl.substring( delimiter + IMG_DELIMITER.length() );
             URL url = new URL( urlSubstring );
             HttpURLConnection connection = (HttpURLConnection) url
                     .openConnection();
